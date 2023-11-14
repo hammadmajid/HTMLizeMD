@@ -3,4 +3,4 @@ project(HTMLizeMD)
 
 set(CMAKE_CXX_STANDARD 23)
 
-add_executable(HTMLizeMD main.cpp)
+add_executable(HTMLizeMD src/main.cpp)
