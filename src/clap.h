@@ -17,4 +17,9 @@ inline auto validate_file(const std::string &path) -> bool {
     return std::filesystem::exists(path) && std::filesystem::path(path).extension() == ".md";
 }
 
+inline auto create_html_file(const std::string& content, std::string &original_file_path) {
+    std::ofstream stream("index.html");
+
+    stream << content;
+}
 #endif //CLAP_H
