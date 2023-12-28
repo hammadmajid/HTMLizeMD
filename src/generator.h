@@ -48,7 +48,7 @@ public:
 
                 generate_tag("li", value);
 
-                for (const std::string close_tag = "</ul>"; const auto ch: close_tag) {
+                for (const std::string close_tag = "</ol>"; const auto ch: close_tag) {
                     m_content.push_back(ch);
                 }
             } else if (type == Paragraph) {
