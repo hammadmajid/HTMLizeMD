@@ -1,5 +1,6 @@
 #include <iostream>
 #include "clap.h"
+#include "lexer.h"
 
 int main(const int argc, char *argv[]) {
     const std::string file_path = process_args(argc, argv);
@@ -9,7 +10,11 @@ int main(const int argc, char *argv[]) {
         exit(EXIT_FAILURE);
     }
 
-    std::cout << "ok: " << file_path << std::endl;
+    const auto tokens = tokenize(file_path);
+
+    for (const auto &[type, value]: tokens) {
+        std::cout << type << " " << value << std::endl;
+    }
 
     return 0;
 }
