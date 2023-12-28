@@ -50,27 +50,39 @@ public:
         }
     }
 
-    auto tokenize() -> std::vector<Token> {
+    [[nodiscard]] auto tokenize() const -> std::vector<Token> {
         std::vector<Token> tokens;
         for (auto &line: stream) {
-            if (const char first_char = line[0]; first_char == '#') {
-                size_t heading_level = 1;
-                while (heading_level <= 6 && line[heading_level] == '#') {
-                    heading_level++;
-                }
+            size_t index = 0;
+            while (index < line.size() && (line[index] == '#' || line[index] == '-' || std::isdigit(line[index]))) {
+                index++;
+            }
 
-                tokens.push_back({
-                      static_cast<TokenType>(heading_level - 1 + heading_level), line
-                });
+            // Skip whitespace after the starting characters
+            while (index < line.size() && std::isspace(line[index])) {
+                index++;
             }
-            else if (first_char == '-') {
-                tokens.push_back({UnorderedList, line});
-            }
-            else if (std::isdigit(first_char)) {
-                tokens.push_back({OrderdList, line});
-            }
-            else {
-                tokens.push_back({Paragraph, line});
+
+            if (std::string content = (index < line.size()) ? line.substr(index) : ""; !content.empty()) {
+                if (line[0] == '#') {
+                    size_t heading_level = 1;
+                    while (heading_level <= 6 && line[heading_level] == '#') {
+                        heading_level++;
+                    }
+
+                    tokens.push_back({
+                        static_cast<TokenType>(HeadingLevel1 - 1 + heading_level), content
+                    });
+                }
+                else if (line[0] == '-') {
+                    tokens.push_back({UnorderedList, content});
+                }
+                else if (std::isdigit(line[0])) {
+                    tokens.push_back({OrderdList, content});
+                }
+                else {
+                    tokens.push_back({Paragraph, content});
+                }
             }
         }
 
