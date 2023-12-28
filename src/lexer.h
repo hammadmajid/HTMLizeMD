@@ -31,13 +31,28 @@ struct Token {
     std::string value;
 };
 
-inline auto tokenize(const std::string &file_path) -> std::vector<Token> {
-    std::fstream file_stream(file_path);
-    std::vector<Token> tokens;
 
-    if (file_stream.is_open()) {
-        std::string line;
-        while (std::getline(file_stream, line)) {
+
+class Lexer {
+    std::vector<std::string> stream;
+
+public:
+    explicit Lexer(const std::string& file_path) {
+        if(std::fstream file_stream(file_path); file_stream.is_open()) {
+            std::string line;
+            while (std::getline(file_stream, line)) {
+                stream.emplace_back(line);
+            }
+        }
+        else {
+            std::cout << "Something went wrong" << std::endl;
+            exit(EXIT_FAILURE);
+        }
+    }
+
+    auto tokenize() -> std::vector<Token> {
+        std::vector<Token> tokens;
+        for (auto &line: stream) {
             if (const char first_char = line[0]; first_char == '#') {
                 size_t heading_level = 1;
                 while (heading_level <= 6 && line[heading_level] == '#') {
@@ -59,14 +74,8 @@ inline auto tokenize(const std::string &file_path) -> std::vector<Token> {
             }
         }
 
-        file_stream.close();
-    } else {
-        std::cout << "Something went wrong" << std::endl;
-        exit(EXIT_FAILURE);
+        return tokens;
     }
-
-    return tokens;
-}
-
+};
 
 #endif //LEXER_H

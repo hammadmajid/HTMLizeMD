@@ -10,7 +10,8 @@ int main(const int argc, char *argv[]) {
         exit(EXIT_FAILURE);
     }
 
-    const auto tokens = tokenize(file_path);
+    Lexer lexer(file_path);
+    const auto tokens = lexer.tokenize();
 
     for (const auto &[type, value]: tokens) {
         std::cout << type << " " << value << std::endl;
