@@ -17,8 +17,6 @@ int main(const int argc, char *argv[]) {
     Generator generator(tokens);
     const auto content = generator.translate();
 
-    std::cout << content << std::endl;
-
     create_html_file(content, output_file);
 
     return EXIT_SUCCESS;
