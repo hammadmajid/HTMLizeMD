@@ -28,6 +28,14 @@ inline auto validate_file(const std::string &path) -> bool {
 inline auto create_html_file(const std::string& content, const std::string &output_file_path) {
     std::ofstream stream(output_file_path);
 
-    stream << content;
+    if (stream.is_open()) {
+        stream << content;
+    }
+    else {
+        std::cout << "Something went wrong" << std::endl;
+        exit(EXIT_FAILURE);
+    }
+
+    stream.close();
 }
 #endif //CLAP_H
