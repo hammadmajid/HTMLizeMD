@@ -1,6 +1,7 @@
 #include <iostream>
 #include "clap.h"
 #include "lexer.h"
+#include "generator.h"
 
 int main(const int argc, char *argv[]) {
     const std::string file_path = process_args(argc, argv);
@@ -10,12 +11,16 @@ int main(const int argc, char *argv[]) {
         exit(EXIT_FAILURE);
     }
 
-    Lexer lexer(file_path);
+    const Lexer lexer(file_path);
     const auto tokens = lexer.tokenize();
 
-    for (const auto &[type, value]: tokens) {
-        std::cout << type << " " << value << std::endl;
-    }
+
+    Generator generator(tokens);
+    const auto content = generator.translate();
+
+    std::cout << content << std::endl;
+
+    // TOOD: write the content to file
 
     return 0;
 }

@@ -5,4 +5,5 @@ set(CMAKE_CXX_STANDARD 23)
 
 add_executable(HTMLizeMD src/main.cpp
         src/clap.h
-        src/lexer.h)
+        src/lexer.h
+        src/generator.h)
