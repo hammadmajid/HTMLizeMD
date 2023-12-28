@@ -4,22 +4,38 @@
 #include <fstream>
 #include <filesystem>
 
-inline auto process_args(const int argc, char *argv[]) -> std::string {
-    if (argc != 2) {
-        std::cout << "Expected at least 1 argument found " << argc - 1;
+struct Args {
+    std::string input_file;
+    std::string output_file;
+};
+
+inline auto process_args(const int argc, char *argv[]) -> Args {
+    if (argc != 3) {
+        std::cout << "Expected exactly 2 argument found " << argc - 1;
         exit(EXIT_FAILURE);
     }
 
-    return argv[1];
+    return Args {
+        .input_file = argv[1],
+        .output_file = argv[2]
+    };
 }
 
 inline auto validate_file(const std::string &path) -> bool {
     return std::filesystem::exists(path) && std::filesystem::path(path).extension() == ".md";
 }
 
-inline auto create_html_file(const std::string& content, std::string &original_file_path) {
-    std::ofstream stream("index.html");
+inline auto create_html_file(const std::string& content, const std::string &output_file_path) {
+    std::ofstream stream(output_file_path);
 
-    stream << content;
+    if (stream.is_open()) {
+        stream << content;
+    }
+    else {
+        std::cout << "Something went wrong" << std::endl;
+        exit(EXIT_FAILURE);
+    }
+
+    stream.close();
 }
 #endif //CLAP_H
