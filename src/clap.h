@@ -3,24 +3,55 @@
 #include <string>
 #include <fstream>
 #include <filesystem>
+#include <vector>
 
 struct Args {
     std::string input_file;
     std::string output_file;
 };
 
-// TODO: Refactor class by using modern C++ OOP features
 class Clap {
+    size_t m_argc;
+    std::vector<std::string> m_argv;
+
+    static auto print_help() {
+        std::cout << "Convert .md files to .html ones" << std::endl;
+        std::cout << std::endl;
+        std::cout << "Usage:" << std::endl;
+        std::cout << "\tHTMLizeMD <path_to_md_file> <path_to_html_file> [options]" << std::endl;
+        std::cout << std::endl;
+        std::cout << "\tOptions:" << std::endl;
+        std::cout << "\t\t--help | -h        Print this message" << std::endl;
+        std::cout << "\t\t--version | -v     Print version info" << std::endl;
+    }
 public:
-    static auto process_args(const int argc, char *argv[]) -> Args {
-        if (argc != 3) {
-            std::cout << "Expected exactly 2 argument found " << argc - 1;
+    Clap (const int argc, char * argv[]) : m_argc(argc) {
+        for (int i = 0; i < m_argc; i++) {
+            m_argv.emplace_back(argv[i]);
+        }
+    }
+
+    [[nodiscard]] auto process_args() const -> Args {
+        for (auto &arg: m_argv) {
+            if (arg == "--help" || arg == "-h") {
+                print_help();
+                exit(EXIT_SUCCESS);
+            }
+            if (arg == "--version" || arg == "-v") {
+                std::cout << "v0.1.0" << std::endl;
+                exit(EXIT_SUCCESS);
+            }
+        }
+
+        if (m_argc != 3) {
+            std::cout << "Expected exactly two arguments" << std::endl;
+            std::cout << "See --help" << std::endl;
             exit(EXIT_FAILURE);
         }
 
         return Args {
-            .input_file = argv[1],
-            .output_file = argv[2]
+            .input_file = m_argv[1],
+            .output_file = m_argv[2]
         };
     }
 

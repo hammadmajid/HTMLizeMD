@@ -4,7 +4,9 @@
 #include "generator.h"
 
 int main(const int argc, char *argv[]) {
-    auto [input_file, output_file] = Clap::process_args(argc, argv);
+    Clap clap(argc, argv);
+
+    auto [input_file, output_file] = clap.process_args();
 
     if(!Clap::validate_file(input_file)) {
         std::cout << input_file << " is not a valid file." << std::endl;
