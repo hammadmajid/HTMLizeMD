@@ -78,22 +78,23 @@ public:
             exit(EXIT_FAILURE);
         }
 
-        if (!has_extension(m_argv.at(1), ".md")) {
-            std::cerr << "Expected " << m_argv.at(1) <<
+        const auto& input_file = m_argv[1]; // expect input file to be at index 1
+        const auto& output_file = m_argv[2]; // expect output file to be at index 2
+
+
+        if (!has_extension(input_file, ".md")) {
+            std::cerr << "Expected " << input_file <<
                     " to be a .md file. See help with --help option." << std::endl;
             exit(EXIT_FAILURE);
         }
 
-        if (!has_extension(m_argv.at(2), ".html")) {
-            std::cerr << "Expected " << m_argv.at(2) <<
+        if (!has_extension(output_file, ".html")) {
+            std::cerr << "Expected " << output_file <<
                     " to be a .html file. See help with --help option." << std::endl;
             exit(EXIT_FAILURE);
         }
 
-        return Args{
-            .input_file = m_argv[1],
-            .output_file = m_argv[2]
-        };
+        return {input_file, output_file};
     }
 };
 
