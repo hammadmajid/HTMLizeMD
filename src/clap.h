@@ -53,10 +53,7 @@ public:
      * @param argc Number of command line arguments.
      * @param argv Array of command line arguments.
      */
-    Clap(const int argc, char *argv[]) : m_argc(argc) {
-        for (int i = 0; i < m_argc; i++) {
-            m_argv.emplace_back(argv[i]);
-        }
+    Clap(const int argc, char *argv[]) : m_argc(argc), m_argv(argv, argv + argc) {
     }
 
     /**
