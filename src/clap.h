@@ -73,19 +73,19 @@ public:
         }
 
         if (m_argc != 3) {
-            std::cout << "Expected exactly two arguments" << std::endl;
-            std::cout << "See --help" << std::endl;
+            std::cerr << "Expected exactly two arguments" << std::endl;
+            std::cerr << "See --help" << std::endl;
             exit(EXIT_FAILURE);
         }
 
         if (!has_extension(m_argv.at(1), ".md")) {
-            std::cout << "Expected " << m_argv.at(1) <<
+            std::cerr << "Expected " << m_argv.at(1) <<
                     " to be a .md file. See help with --help option." << std::endl;
             exit(EXIT_FAILURE);
         }
 
         if (!has_extension(m_argv.at(2), ".html")) {
-            std::cout << "Expected " << m_argv.at(2) <<
+            std::cerr << "Expected " << m_argv.at(2) <<
                     " to be a .html file. See help with --help option." << std::endl;
             exit(EXIT_FAILURE);
         }
