@@ -4,9 +4,9 @@
 #include "generator.h"
 
 int main(const int argc, char *argv[]) {
-    auto [input_file, output_file] = process_args(argc, argv);
+    auto [input_file, output_file] = Clap::process_args(argc, argv);
 
-    if(!validate_file(input_file)) {
+    if(!Clap::validate_file(input_file)) {
         std::cout << input_file << " is not a valid file." << std::endl;
         exit(EXIT_FAILURE);
     }
@@ -19,7 +19,7 @@ int main(const int argc, char *argv[]) {
 
     std::cout << content << std::endl;
 
-    create_html_file(content, output_file);
+    Clap::create_html_file(content, output_file);
 
     return EXIT_SUCCESS;
 }

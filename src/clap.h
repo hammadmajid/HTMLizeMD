@@ -9,33 +9,38 @@ struct Args {
     std::string output_file;
 };
 
-inline auto process_args(const int argc, char *argv[]) -> Args {
-    if (argc != 3) {
-        std::cout << "Expected exactly 2 argument found " << argc - 1;
-        exit(EXIT_FAILURE);
+// TODO: Refactor class by using modern C++ OOP features
+class Clap {
+public:
+    static auto process_args(const int argc, char *argv[]) -> Args {
+        if (argc != 3) {
+            std::cout << "Expected exactly 2 argument found " << argc - 1;
+            exit(EXIT_FAILURE);
+        }
+
+        return Args {
+            .input_file = argv[1],
+            .output_file = argv[2]
+        };
     }
 
-    return Args {
-        .input_file = argv[1],
-        .output_file = argv[2]
-    };
-}
-
-inline auto validate_file(const std::string &path) -> bool {
-    return std::filesystem::exists(path) && std::filesystem::path(path).extension() == ".md";
-}
-
-inline auto create_html_file(const std::string& content, const std::string &output_file_path) {
-    std::ofstream stream(output_file_path);
-
-    if (stream.is_open()) {
-        stream << content;
-    }
-    else {
-        std::cout << "Something went wrong" << std::endl;
-        exit(EXIT_FAILURE);
+    static auto validate_file(const std::string &path) -> bool {
+        return std::filesystem::exists(path) && std::filesystem::path(path).extension() == ".md";
     }
 
-    stream.close();
-}
+    static auto create_html_file(const std::string& content, const std::string &output_file_path) {
+        std::ofstream stream(output_file_path);
+
+        if (stream.is_open()) {
+            stream << content;
+        }
+        else {
+            std::cout << "Something went wrong" << std::endl;
+            exit(EXIT_FAILURE);
+        }
+
+        stream.close();
+    }
+};
+
 #endif //CLAP_H
