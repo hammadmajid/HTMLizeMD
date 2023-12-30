@@ -13,7 +13,16 @@ int main(const int argc, char *argv[]) {
     Generator generator(tokens);
     const auto content = generator.translate();
 
-    Clap::create_html_file(content, output_file);
+    std::ofstream stream(output_file);
+
+    if (stream.is_open()) {
+        stream << content;
+    } else {
+        std::cout << "Something went wrong when writing to file." << std::endl;
+        exit(EXIT_FAILURE);
+    }
+
+    stream.close();
 
     return EXIT_SUCCESS;
 }

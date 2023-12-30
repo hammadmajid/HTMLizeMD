@@ -2,7 +2,6 @@
 #define CLAP_H
 #include <iostream>
 #include <string>
-#include <fstream>
 #include <filesystem>
 #include <vector>
 
@@ -70,20 +69,6 @@ public:
             .input_file = m_argv[1],
             .output_file = m_argv[2]
         };
-    }
-
-    static auto create_html_file(const std::string& content, const std::string &output_file_path) {
-        std::ofstream stream(output_file_path);
-
-        if (stream.is_open()) {
-            stream << content;
-        }
-        else {
-            std::cout << "Something went wrong" << std::endl;
-            exit(EXIT_FAILURE);
-        }
-
-        stream.close();
     }
 };
 
