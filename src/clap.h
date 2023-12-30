@@ -1,5 +1,6 @@
 #ifndef CLAP_H
 #define CLAP_H
+#include <iostream>
 #include <string>
 #include <fstream>
 #include <filesystem>
@@ -23,6 +24,10 @@ class Clap {
         std::cout << "\tOptions:" << std::endl;
         std::cout << "\t\t--help | -h        Print this message" << std::endl;
         std::cout << "\t\t--version | -v     Print version info" << std::endl;
+    }
+
+    static auto has_extention(const std::string &path, const std::string &extension) -> bool {
+        return std::filesystem::exists(path) && std::filesystem::path(path).extension() == extension;
     }
 public:
     Clap (const int argc, char * argv[]) : m_argc(argc) {
@@ -49,14 +54,22 @@ public:
             exit(EXIT_FAILURE);
         }
 
+        if (!has_extention(m_argv.at(1), ".md")) {
+            std::cout << "Expected " << m_argv.at(1) <<
+                " to be a .md file. See help with --help option." << std::endl;
+            exit(EXIT_FAILURE);
+        }
+
+        if (!has_extention(m_argv.at(2), ".html")) {
+            std::cout << "Expected " << m_argv.at(2) <<
+                " to be a .html file. See help with --help option." << std::endl;
+            exit(EXIT_FAILURE);
+        }
+
         return Args {
             .input_file = m_argv[1],
             .output_file = m_argv[2]
         };
-    }
-
-    static auto validate_file(const std::string &path) -> bool {
-        return std::filesystem::exists(path) && std::filesystem::path(path).extension() == ".md";
     }
 
     static auto create_html_file(const std::string& content, const std::string &output_file_path) {
