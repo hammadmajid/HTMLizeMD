@@ -46,7 +46,7 @@ TEST(ClapTest, ProcessArgsValidArgs) {
     const Clap clap(3, const_cast<char**>(argv));
     const auto result = clap.process_args();
 
-    EXPECT_EQ("input.md", result.value().input_file);
+    EXPECT_EQ("../README.md", result.value().input_file);
     EXPECT_EQ("output.html", result.value().output_file);
 }
 
