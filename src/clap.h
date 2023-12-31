@@ -55,13 +55,21 @@ class Clap {
     }
 
     /**
-     * @brief Checks if a file has a specific extension.
+     * @brief Checks if a file exists and path has a Markdown (.md) extension.
      * @param path The path to the file.
-     * @param extension The expected file extension.
-     * @return True if the file has the specified extension, false otherwise.
-     */
-    static auto has_extension(const std::string &path, const std::string &extension) -> bool {
-        return std::filesystem::exists(path) && std::filesystem::path(path).extension() == extension;
+     * @return True if the file exits and path has the Markdown extension, false otherwise.
+    */
+    static auto validate_source_file(const std::string &path) -> bool {
+        return std::filesystem::exists(path) && std::filesystem::path(path).extension() == ".md";
+    }
+
+    /**
+     * @brief Checks if a file path has an HTML (.html) extension.
+     * @param path The path to the file.
+     * @return True if the file path has the HTML extension, false otherwise.
+    */
+    static auto validate_output_file(const std::string &path) -> bool {
+        return std::filesystem::path(path).extension() == ".html";
     }
 
 public:
@@ -95,11 +103,11 @@ public:
         const auto &input_file = m_argv[1]; // expect input file to be at index 1
         const auto &output_file = m_argv[2]; // expect output file to be at index 2
 
-        if (!has_extension(input_file, ".md")) {
+        if (!validate_source_file(input_file)) {
             return std::unexpected{ArgsStatus::InvalidSourceFile};
         }
 
-        if (!has_extension(output_file, ".html")) {
+        if (!validate_output_file(output_file)) {
             return std::unexpected{ArgsStatus::InvalidOutputFile};
         }
 
