@@ -12,14 +12,14 @@ job("Build and push Docker") {
             // push = false
 
             // path to Docker context (by default, context is working dir)
-            context = "docker"
+            // context = "docker"
             // path to Dockerfile relative to the project root
             // if 'file' is not specified, Docker will look for it in 'context'/Dockerfile
-            file = "docker/config/Dockerfile"
+            // file = "docker/config/Dockerfile"
             // build-time variables
             args["HTTP_PROXY"] = "http://10.20.30.2:1234"
             // image labels
-            labels["vendor"] = "mycompany"
+            labels["hammadmajid"] = "htmlizemd"
             // to add a raw list of additional build arguments, use
             // extraArgsForBuildCommand = listOf("...")
             // to add a raw list of additional push arguments, use
