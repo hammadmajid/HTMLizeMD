@@ -21,7 +21,7 @@ int main(const int argc, char *argv[]) {
             case ArgsStatus::HelpFlag:
                 return EXIT_SUCCESS;
             case ArgsStatus::VersionFlag:
-                std::cout << "v0.1.0" << std::endl;
+                std::cout << "v0.1.1" << std::endl;
                 return EXIT_SUCCESS;
         }
         std::cerr << "\nSee help with --help option" << std::endl;
