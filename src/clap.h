@@ -5,6 +5,7 @@
 #include <string>
 #include <filesystem>
 #include <vector>
+#include <expected>
 
 /**
  * @struct Args
@@ -13,6 +14,22 @@
 struct Args {
     std::string input_file; ///< Path to the input Markdown file.
     std::string output_file; ///< Path to the output HTML file.
+};
+
+/**
+ * @enum ArgsStatus
+ * @brief Enum class representing the status of command line arguments processing.
+ */
+enum class ArgsStatus {
+    HelpFlag,
+    ///< Help flag was encountered.
+    VersionFlag,
+    ///< Version flag was encountered.
+    InvalidNumOfArgs,
+    ///< Invalid number of command line arguments.
+    InvalidSourceFile,
+    ///< Input file has an invalid extension.
+    InvalidOutputFile ///< Output file has an invalid extension.
 };
 
 /**
@@ -57,44 +74,36 @@ public:
     }
 
     /**
-     * @brief Processes command line arguments and returns Args structure.
-     * @return Args structure containing input and output file paths.
+     * @brief Processes command line arguments and returns the corresponding status or Args structure.
+     * @return An std::expected containing either Args or ArgsStatus.
      */
-    [[nodiscard]] auto process_args() const -> Args {
+    [[nodiscard]] auto process_args() const -> std::expected<Args, ArgsStatus> {
         for (const auto &arg: m_argv) {
             if (arg == "--help" || arg == "-h") {
                 print_help();
-                exit(EXIT_SUCCESS);
+                return std::unexpected{ArgsStatus::HelpFlag};
             }
             if (arg == "--version" || arg == "-v") {
-                std::cout << "v0.1.0" << std::endl;
-                exit(EXIT_SUCCESS);
+                return std::unexpected{ArgsStatus::VersionFlag};
             }
         }
 
         if (m_argc != 3) {
-            std::cerr << "Expected exactly two arguments" << std::endl;
-            std::cerr << "See --help" << std::endl;
-            exit(EXIT_FAILURE);
+            return std::unexpected{ArgsStatus::InvalidNumOfArgs};
         }
 
-        const auto& input_file = m_argv[1]; // expect input file to be at index 1
-        const auto& output_file = m_argv[2]; // expect output file to be at index 2
-
+        const auto &input_file = m_argv[1]; // expect input file to be at index 1
+        const auto &output_file = m_argv[2]; // expect output file to be at index 2
 
         if (!has_extension(input_file, ".md")) {
-            std::cerr << "Expected " << input_file <<
-                    " to be a .md file. See help with --help option." << std::endl;
-            exit(EXIT_FAILURE);
+            return std::unexpected{ArgsStatus::InvalidSourceFile};
         }
 
         if (!has_extension(output_file, ".html")) {
-            std::cerr << "Expected " << output_file <<
-                    " to be a .html file. See help with --help option." << std::endl;
-            exit(EXIT_FAILURE);
+            return std::unexpected{ArgsStatus::InvalidOutputFile};
         }
 
-        return {input_file, output_file};
+        return Args{input_file, output_file};
     }
 };
 
