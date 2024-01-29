@@ -4,7 +4,16 @@
 #include "generator.h"
 
 int main(const int argc, char *argv[]) {
-    auto [input_file, output_file] = process_args(argc, argv);
+    const Clap clap(argc, argv);
+    if (!clap.process_args()) {
+        exit(EXIT_FAILURE);
+    }
+
+    if (const auto input_source = clap.extract_source_file(); input_source.has_value()) {
+        const Lexer lexer(input_source.value());
+    }
+
+    auto [input_file, output_file, help] = process_args(argc, argv);
 
     if(!validate_file(input_file)) {
         std::cout << input_file << " is not a valid file." << std::endl;
